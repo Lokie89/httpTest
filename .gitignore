@@ -2,3 +2,5 @@
 # Default ignored files
 /workspace.xml
 .idea/
+out/
+/httpStudy.iml
