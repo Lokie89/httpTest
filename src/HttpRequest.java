@@ -24,5 +24,57 @@ public class HttpRequest {
     private String cookie;
 
 
+    public String getMethod() {
+        return method;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public String getAccept() {
+        return accept;
+    }
+
+    public String getCookie() {
+        return cookie;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setAccept(String accept) {
+        this.accept = accept;
+    }
+
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
+    }
+
+    @Override
+    public String toString() {
+        return "method : " + getMethod() + " uri : " + getUri() + " protocol : " + getProtocol() + " host : " + getHost() + " accept : " + getAccept() + " cookie : " + getCookie();
+    }
 
 }
