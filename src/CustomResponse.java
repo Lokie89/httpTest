@@ -1,4 +1,4 @@
-public class HttpResponse {
+public class CustomResponse {
 //    HTTP/1.1 200OK
 //    Date:Mon,23May 2005 22:38:34GMT
 //    Content-Type:text/html;charset=UTF-8
@@ -35,4 +35,6 @@ public class HttpResponse {
     private String accept_Ranges;
     private String connection;
     private String responseData;
+
+
 }

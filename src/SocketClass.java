@@ -6,10 +6,13 @@ public class SocketClass {
         try {
 
             ServerSocket serverSocket = new ServerSocket(9000);
+            RequestThreadPool requestThreadPool = new RequestThreadPool();
             while (true) {
                 Socket socket = serverSocket.accept();
-                RequestThread thread = new RequestThread(socket);
-                thread.run();
+                RequestThread requestThread = requestThreadPool.getRequestThread(socket);
+                requestThread.run();
+                socket.close();
+                requestThreadPool.returnRequestThread(requestThread);
             }
         } catch (Exception e) {
 

@@ -1,4 +1,4 @@
-public class HttpRequest {
+public class CustomRequest {
 
     // example
     //

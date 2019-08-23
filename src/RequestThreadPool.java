@@ -1,18 +1,26 @@
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.net.Socket;
+import java.util.Stack;
 
 public class RequestThreadPool {
     private static final int amountThread = 10;
 
-    public void runningThreads() {
-        //https://limkydev.tistory.com/55
-        //https://nearhomedeveloper.tistory.com/entry/JavaThread-Java-Thread-바로-종료-시키기-–-interrupt
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+    Stack<RequestThread> threadPool = null;
+
+    public RequestThreadPool() {
+        threadPool = new Stack<>();
         for (int i = 0; i < amountThread; i++) {
-            ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
-
+            RequestThread requestThread = new RequestThread();
+            threadPool.push(requestThread);
         }
+    }
 
+    public RequestThread getRequestThread(Socket socket) {
+        RequestThread requestThread = threadPool.pop();
+        requestThread.setSocket(socket);
+        return requestThread;
+    }
+
+    public void returnRequestThread(RequestThread requestThread){
+        threadPool.push(requestThread);
     }
 }
