@@ -3,20 +3,24 @@ import java.net.Socket;
 
 public class SocketClass {
     public static void main(String[] args) {
+        ServerSocket serverSocket = null;
         try {
-
-            ServerSocket serverSocket = new ServerSocket(9000);
-            RequestThreadPool requestThreadPool = new RequestThreadPool();
+            serverSocket = new ServerSocket(8080);
+            CustomThreadPool requestThreadPool = new CustomThreadPool();
             while (true) {
                 Socket socket = serverSocket.accept();
-                RequestThread requestThread = requestThreadPool.getRequestThread(socket);
-                requestThread.run();
-                socket.close();
-                requestThreadPool.returnRequestThread(requestThread);
+                CustomThread customThread = requestThreadPool.getCustomThread(socket);
+                customThread.run();
+                requestThreadPool.returnRequestThread(customThread);
             }
         } catch (Exception e) {
 
-        }
+        } finally {
+            try {
+                serverSocket.close();
+            }catch (Exception e){
 
+            }
+        }
     }
 }
