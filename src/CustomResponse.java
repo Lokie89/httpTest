@@ -1,40 +1,28 @@
 public class CustomResponse {
-//    HTTP/1.1 200OK
-//    Date:Mon,23May 2005 22:38:34GMT
-//    Content-Type:text/html;charset=UTF-8
-//    Content-Encoding:UTF-8
-//    Content-Length:138
-//    Last-Modified:Wed,08Jan 2003 23:11:55GMT
-//    Server:Apache/1.3.3.7(Unix)(Red-Hat/Linux)
-//    ETag:"3f80f-1b6-3e1cb03b"
-//    Accept-Ranges:bytes
-//    Connection:close
-//
-//  <html>
-//  <head>
-//    <title> An Example
-//    Page</title>
-//  </head>
-//  <body>
-//    Hello World, this
-//    is a
-//    very simple
-//    HTML document.
-//  </body>
-//  </html>
 
-    private String protocol = "HTTP/1.1";
-    private String status;
-    private String date;
-    private String content_Type;
-    private String content_Encoding;
-    private String content_Length;
-    private String last_Modified;
-    private String server;
-    private String eTag;
-    private String accept_Ranges;
-    private String connection;
-    private String responseData;
+    private static final String httpVersion = "HTTP/1.1";
+
+    public String getHeader(int statusCode, int bodyLength) {
+        StringBuilder sb = new StringBuilder();
+        if (statusCode == 200) {
+            sb.append(httpVersion + " 200 OK\r\n");
+            sb.append("Content-Type: text/html;charset=utf-8\r\n");
+            sb.append("Content-Length: " + bodyLength + "\r\n");
+            sb.append("\r\n");
+
+        } else if(statusCode == 404){
+            sb.append(httpVersion + " 404 Not Found\r\n");
+            sb.append("Content-Type: text/html;charset=utf-8\r\n");
+            sb.append("Content-Length: " + bodyLength + "\r\n");
+            sb.append("\r\n");
+        }else{
+            sb.append(httpVersion + " 500 Internal error\r\n");
+            sb.append("Content-Type: text/html;charset=utf-8\r\n");
+            sb.append("Content-Length: " + bodyLength + "\r\n");
+            sb.append("\r\n");
+        }
+        return sb.toString();
+    }
 
 
 }
