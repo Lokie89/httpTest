@@ -1,34 +1,30 @@
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
 
 public class Controller {
-
+    private static final String fileRoot = "./src/html/";
     public void httpControll(CustomRequest request, Socket socket) {
-        CustomResponse customResponse = new CustomResponse();
         String uri = request.getUri();
-        System.out.print(uri);
-        DataOutputStream bw = null;
+        BufferedWriter bw = null;
         try {
-            bw = new DataOutputStream(socket.getOutputStream());
-            System.out.println("###############");
-            File file = new File("./src/"+request.getUri());
-            FileInputStream fileInputStream = new FileInputStream("./src/"+request.getUri());
-            byte[] fileContent = new byte[(int)file.length()];
-            fileInputStream.read(fileContent);
-            byte[] body = "Hello World".getBytes();
-            bw.writeBytes("HTTP/1.1 200 OK \r\n");
-            bw.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            bw.writeBytes("Content-Length: " + fileContent.length + "\r\n");
-            bw.writeBytes("\r\n");
-
-            bw.write(fileContent, 0, fileContent.length);
-            bw.writeBytes("\r\n");
+            bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            FileInputStream fileInputStream = new FileInputStream(fileRoot + uri);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fileInputStream));
+            String body = "";
+            String msg = null;
+            while ((msg = br.readLine()) != null) {
+                body += msg;
+                body += "\n";
+            }
+//            String body = "Hello World";
+            bw.write("HTTP/1.1 200 OK \r\n");
+            bw.write("Content-Type: text/html;charset=utf-8\r\n");
+            bw.write("Content-Length: " + body.length() + "\r\n");
+            bw.write("\r\n");
+            bw.write(body, 0, body.length());
             bw.flush();
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
             try {
                 socket.close();

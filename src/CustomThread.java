@@ -16,37 +16,35 @@ public class CustomThread implements Runnable {
         try {
 
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String msg = null;
+            String msg = br.readLine();
             CustomRequest request = new CustomRequest();
+            request.setMethod(msg.split(" ")[0]);
+            request.setUri(msg.split(" ")[1]);
+            request.setProtocol(msg.split(" ")[2]);
             int i = 0;
             while (!(msg = br.readLine()).equals("")) {
                 String[] msgArray = msg.split(" ");
                 switch (++i) {
                     case 1:
-                        request.setMethod(msgArray[0]);
-                        request.setUri(msgArray[1]);
-                        request.setProtocol(msgArray[2]);
-                        break;
-                    case 2:
                         request.setHost(msgArray[1]);
                         break;
-                    case 9:
+                    case 8:
                         request.setAccept(msgArray[1]);
                         break;
-                    case 13:
+                    case 12:
                         request.setCookie(msgArray[1]);
                         break;
                     default:
                         break;
                 }
             }
-            request.setUri("/a");
-            Controller controller = new Controller();
-            controller.httpControll(request, socket);
+            request.setUri(request.getUri());
+            if(!request.getUri().equals("/favicon.ico")){
+                Controller controller = new Controller();
+                controller.httpControll(request, socket);
+            }
             br.close();
-            System.out.println(request.toString());
-
-
+            socket.close();
         } catch (Exception e) {
 
         }
