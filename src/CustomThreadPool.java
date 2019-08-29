@@ -20,7 +20,7 @@ public class CustomThreadPool {
         return customThread;
     }
 
-    public void returnRequestThread(CustomThread customThread){
+    public void returnRequestThread(CustomThread customThread) {
         threadPool.push(customThread);
     }
 }

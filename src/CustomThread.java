@@ -1,9 +1,13 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Map;
 
 public class CustomThread implements Runnable {
 
+    private static final String fileRoot = "./src/html";
     private Socket socket;
 
     public void setSocket(Socket socket) {
@@ -14,7 +18,6 @@ public class CustomThread implements Runnable {
     public void run() {
         BufferedReader br = null;
         try {
-
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String msg = br.readLine();
             CustomRequest request = new CustomRequest();
@@ -38,15 +41,29 @@ public class CustomThread implements Runnable {
                         break;
                 }
             }
-            request.setUri(request.getUri());
-            if(!request.getUri().equals("/favicon.ico")){
-                Controller controller = new Controller();
-                controller.httpControll(request, socket);
+            if (!request.getUri().equals("/favicon.ico")) {
+                String uri = request.getUri();
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                Map result = new FileSystem().getFile(fileRoot + uri);
+
+                int statusCode = (int) result.get("statusCode");
+                String body = (String) result.get("body");
+
+                bw.write(new CustomResponse().getHeader(statusCode, body.length()));
+                bw.write(body, 0, body.length());
+                bw.flush();
+                bw.close();
             }
-            br.close();
-            socket.close();
+
         } catch (Exception e) {
 
+        } finally {
+            try {
+                br.close();
+                socket.close();
+            } catch (Exception e) {
+
+            }
         }
     }
 }

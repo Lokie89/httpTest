@@ -4,7 +4,9 @@ import java.util.Map;
 
 public class FileSystem {
 
-    public Map fileToString(String path) {
+    HttpStatus status = HttpStatus.getInstance();
+
+    public Map getFile(String path) {
         Map<String, Object> result = new HashMap<>();
         BufferedReader br = null;
         try {
@@ -16,15 +18,15 @@ public class FileSystem {
                 sb.append(fileString);
                 sb.append("\n");
             }
-            result.put("statusCode", 200);
+            result.put("statusCode", status.getStatus(null));
             result.put("body", sb.toString());
             return result;
         } catch (FileNotFoundException e) {
-            result.put("statusCode", 404);
+            result.put("statusCode", status.getStatus(e));
             result.put("body", "");
             return result;
         } catch (IOException e) {
-            result.put("statusCode", 500);
+            result.put("statusCode", status.getStatus(e));
             result.put("body", "");
             return result;
         } finally {
